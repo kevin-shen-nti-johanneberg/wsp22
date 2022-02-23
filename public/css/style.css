@@ -1,0 +1,8 @@
+body {
+    margin:0px;
+    font-size:100%;
+    background-color: rgb(89, 87, 156);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color:var(--darkgray-color);
+}
+
