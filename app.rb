@@ -23,21 +23,19 @@ post('/login') do
     db.results_as_hash = true
 
     if db.execute("SELECT password FROM player WHERE player_name = ?",name).first["password"] == pass        
-        p "DET FUNKAR!"
         redirect('/profile')
+    else
+        redirect('/login')
     end
-
+    redirect('/login')
 end
 
 post('/register') do
     #Hämta data ifrån formulär
-
     name = params[:player_name]    
     pass = params[:password]
 
-
     #Lägg till data i databasen
-
     db = SQLite3::Database.new("db/quiz.db")
     db.execute("INSERT INTO player (player_name,password) VALUES (?,?)",name,pass)
 
