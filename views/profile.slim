@@ -1,5 +1,11 @@
+header class="title"
+    h1 = session[current_user]
+
 form action="/profile" method="post" 
-    input type="text" name="question1" placeholder="Question?!"
-    input type="text" name="question2" placeholder="Question!?"
-    input type="text" name="question3" placeholder="Question?!"
-    input type="submit" value="refresh"
+    input type="text" name="question" placeholder="Question"
+    input type="text" name="right" placeholder="Correct"
+    input type="text" name="wrong" placeholder="Incorrect"
+
+    input type="submit" value="Post"
+
+

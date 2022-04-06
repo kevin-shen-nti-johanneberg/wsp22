@@ -21,17 +21,16 @@ post('/login') do
 
     db = SQLite3::Database.new("db/quiz.db")
     db.results_as_hash = true
+    id =  db.execute("SELECT player_id FROM player WHERE player_name =?",name).first
     user_list = db.execute("SELECT password FROM player WHERE player_name = ?",name).first
-
-    print "aarigjapiergjsepijgporkgwokgefk"
-    p user_list
 
     if user_list == nil
         redirect('login')
     end
 
     if db.execute("SELECT password FROM player WHERE player_name = ?",name).first["password"] == pass
-        redirect('/profile')
+        session[:current_user] = id
+        redirect('/profile') 
     end
 
 end
@@ -49,6 +48,14 @@ post('/register') do
 end
 
 post('/profile') do
+    quest = params[:question]
+    answr = params[:right]    
+    answw = params[:wrong] 
+
+    db = SQLite3::Database.new("db/quiz.db")
+    db.results_as_hash = true
+
+
     redirect('/profile')
 end
 

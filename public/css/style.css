@@ -9,11 +9,12 @@ body {
     font-size:100%;
     background-color: rgb(46, 45, 66);
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: whitesmoke;
     color:var(--darkgray-color);
 }
 
 .title {
-    background:white;
+    background:whitesmoke;
     text-align: center;
     height: 80px;
     padding-top: 18px;
