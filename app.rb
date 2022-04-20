@@ -48,13 +48,25 @@ post('/register') do
 end
 
 post('/profile') do
+
     quest = params[:question]
     answr = params[:right]    
     answw = params[:wrong] 
 
     db = SQLite3::Database.new("db/quiz.db")
     db.results_as_hash = true
+    
+    puts db.execute("SELECT * FROM question WHERE player_id = ?",session[:current_user]["player_id"]).first
 
+    if db.execute("SELECT * FROM question WHERE player_id = ?",session[:current_user]["player_id"]).first == nil
+
+        db.execute("INSERT INTO question (player_id,right,wrong,player_question) VALUES (?,?,?,?)",session[:current_user]["player_id"],answr,answw,quest)
+
+    elsif db.execute("SELECT * FROM question WHERE player_id = ?",session[:current_user]["player_id"]).first != nil 
+        
+        db.execute("UPDATE question SET right = ?, wrong = ?, player_question = ? WHERE player_id = ?",answr,answw,quest,session[:current_user]["player_id"])
+
+    end
 
     redirect('/profile')
 end
@@ -72,7 +84,10 @@ get('/register') do
 end
 
 get('/profile') do
-    slim(:profile)
+    quest = params[:question]
+    answr = params[:right]    
+    answw = params[:wrong] 
+    slim(:profile, locals:{quest:quest,answr:answr,answw:answw})
 end
 
 

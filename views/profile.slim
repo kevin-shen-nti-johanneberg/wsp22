@@ -1,5 +1,5 @@
 header class="title"
-    h1 = session[current_user]
+    h1 = session[:current_user]
 
 form action="/profile" method="post" 
     input type="text" name="question" placeholder="Question"
@@ -8,4 +8,8 @@ form action="/profile" method="post"
 
     input type="submit" value="Post"
 
+sectione class="quiz_info"
+    h1 = "Question: #{quest}"
+    h1 = "Right Answer: #{right}"
+    h1 = "Wrong Answer: #{wrong}"
 
