@@ -2,14 +2,19 @@ header class="title"
     h1 = session[:current_user]
 
 form action="/profile" method="post" 
-    input type="text" name="question" placeholder="Question"
-    input type="text" name="right" placeholder="Correct"
-    input type="text" name="wrong" placeholder="Incorrect"
+    input type="text" name="question" placeholder="question"
+    input type="text" name="right" placeholder="right"
+    input type="text" name="wrong" placeholder="wrong"
+    
+    select name="Choose genre" id="genre"
+        option value="trivia"
+            h1 trivia
+        option value="geography"
+            h1 geography
+        option value="math"
+            h1 math
+        option value="3B"
+            h1 3B
 
     input type="submit" value="Post"
-
-sectione class="quiz_info"
-    h1 = "Question: #{quest}"
-    h1 = "Right Answer: #{right}"
-    h1 = "Wrong Answer: #{wrong}"
 

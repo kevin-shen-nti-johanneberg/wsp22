@@ -5,13 +5,28 @@ require 'sqlite3'
 enable :sessions
 
 post('') do
-    #Skapa koppling till databasen
     db = SQLite3::Database.new("db/quiz.db")
-    #Få svar i strukturen
     db.results_as_hash = true
-    #Hämta data, skicka data
-    result = db.execute("SELECT * FROM users")
-    slim(:users,locals:{key:result})
+
+    correct = params[:player_name]    
+    incorrect = params[:password]
+
+    tmp_question = db.execute("SELECT * FROM question")
+    
+    random.rand(db.size - 1)
+    quiz_quest = db.execute("SELECT * FROM question WHERE question_id LIKE #{tmp_question}").first["player_question"]
+    quiz_right = db.execute("SELECT * FROM question WHERE question_id LIKE #{tmp_question}").first["right"]
+    quiz_wrong = db.execute("SELECT * FROM question WHERE question_id LIKE #{tmp_question}").first["wrong"]
+
+    session[:current_question] = quiz_quest
+    session[:current_right] = quiz_right
+    session[:current_wrong] = quiz_wrong
+
+
+    #if quiz ==
+    #tmp_question = random.rand(db.size - 1)
+
+
     redirect('/index')
 end
 
@@ -55,8 +70,6 @@ post('/profile') do
 
     db = SQLite3::Database.new("db/quiz.db")
     db.results_as_hash = true
-    
-    puts db.execute("SELECT * FROM question WHERE player_id = ?",session[:current_user]["player_id"]).first
 
     if db.execute("SELECT * FROM question WHERE player_id = ?",session[:current_user]["player_id"]).first == nil
 
@@ -84,10 +97,7 @@ get('/register') do
 end
 
 get('/profile') do
-    quest = params[:question]
-    answr = params[:right]    
-    answw = params[:wrong] 
-    slim(:profile, locals:{quest:quest,answr:answr,answw:answw})
+    slim(:profile)
 end
 
 

@@ -2,17 +2,12 @@ header class="title"
     h1 Infinity Quiz
 section class="game"
     div class="questions"
-        h1 Question
-    div class="options"
-        h2 Answ #1
-        h2 Answ #2
-section class="side_bar"
-    header class="leader board"
-        h1 Leader Board 
-    ul class="rankers"
-        li 1
-        li 2
-        li 3
-    div class="current_score"
-        h1 Score 
+        session[:current_question]
+
+    form action="/" method="post" 
+    input type="radio" onclick="alert('Hello World!')" value="#{}"
+    input type="radio" onclick="alert('Hello World!')" value="#{}"
+
+div class="current_score"
+    h1 Score 
 
