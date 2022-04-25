@@ -4,30 +4,41 @@ require 'sqlite3'
 
 enable :sessions
 
-post('') do
-    db = SQLite3::Database.new("db/quiz.db")
-    db.results_as_hash = true
+score = 0
+db = SQLite3::Database.new("db/quiz.db")
+db.results_as_hash = true
 
-    correct = params[:player_name]    
-    incorrect = params[:password]
+chosen_question_id = db.execute("SELECT question_id FROM question ORDER BY RANDOM() LIMIT 1").first["question_id"]
+tmp_question = db.execute("SELECT player_question FROM question WHERE question_id = ?",chosen_question_id).first["player_question"]
+tmp_right = db.execute("SELECT right FROM question WHERE question_id = ?",chosen_question_id).first["right"]
+tmp_wrong = db.execute("SELECT wrong FROM question WHERE question_id = ?",chosen_question_id).first["wrong"]
 
-    tmp_question = db.execute("SELECT * FROM question")
-    
-    random.rand(db.size - 1)
-    quiz_quest = db.execute("SELECT * FROM question WHERE question_id LIKE #{tmp_question}").first["player_question"]
-    quiz_right = db.execute("SELECT * FROM question WHERE question_id LIKE #{tmp_question}").first["right"]
-    quiz_wrong = db.execute("SELECT * FROM question WHERE question_id LIKE #{tmp_question}").first["wrong"]
+array_of_options = [tmp_right,tmp_wrong]
+option1, option2 = array_of_options.sample(2)
 
-    session[:current_question] = quiz_quest
-    session[:current_right] = quiz_right
-    session[:current_wrong] = quiz_wrong
+post('/') do
+    locked_in_answer = params[:quiz_options]
+    if db.execute("SELECT right FROM question WHERE question_id = ?",chosen_question_id).first["right"] == locked_in_answer
+        score += 1
+        chosen_question_id = db.execute("SELECT question_id FROM question ORDER BY RANDOM() LIMIT 1").first["question_id"]
+        tmp_question = db.execute("SELECT player_question FROM question WHERE question_id = ?",chosen_question_id).first["player_question"]
+        tmp_right = db.execute("SELECT right FROM question WHERE question_id = ?",chosen_question_id).first["right"]
+        tmp_wrong = db.execute("SELECT wrong FROM question WHERE question_id = ?",chosen_question_id).first["wrong"]
 
+        array_of_options = [tmp_right,tmp_wrong]
+        option1, option2 = array_of_options.sample(2)
+    else
+        score = 0
+        chosen_question_id = db.execute("SELECT question_id FROM question ORDER BY RANDOM() LIMIT 1").first["question_id"]
+        tmp_question = db.execute("SELECT player_question FROM question WHERE question_id = ?",chosen_question_id).first["player_question"]
+        tmp_right = db.execute("SELECT right FROM question WHERE question_id = ?",chosen_question_id).first["right"]
+        tmp_wrong = db.execute("SELECT wrong FROM question WHERE question_id = ?",chosen_question_id).first["wrong"]
 
-    #if quiz ==
-    #tmp_question = random.rand(db.size - 1)
+        array_of_options = [tmp_right,tmp_wrong]
+        option1, option2 = array_of_options.sample(2)
+    end
 
-
-    redirect('/index')
+    redirect('/')
 end
 
 post('/login') do
@@ -36,11 +47,11 @@ post('/login') do
 
     db = SQLite3::Database.new("db/quiz.db")
     db.results_as_hash = true
-    id =  db.execute("SELECT player_id FROM player WHERE player_name =?",name).first
+    id =  db.execute("SELECT player_id FROM player WHERE player_name = ?",name).first
     user_list = db.execute("SELECT password FROM player WHERE player_name = ?",name).first
 
     if user_list == nil
-        redirect('login')
+        redirect('/login')
     end
 
     if db.execute("SELECT password FROM player WHERE player_name = ?",name).first["password"] == pass
@@ -67,6 +78,7 @@ post('/profile') do
     quest = params[:question]
     answr = params[:right]    
     answw = params[:wrong] 
+    genre = params[:genre]
 
     db = SQLite3::Database.new("db/quiz.db")
     db.results_as_hash = true
@@ -85,7 +97,7 @@ post('/profile') do
 end
 
 get('/') do
-    slim(:index)
+    slim(:index,locals:{index_id:chosen_question_id,index_q:tmp_question,index_1:option1,index_2:option2,highscore:score})
 end
 
 get('/login') do

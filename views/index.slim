@@ -2,12 +2,20 @@ header class="title"
     h1 Infinity Quiz
 section class="game"
     div class="questions"
-        session[:current_question]
+        h1 question_id #{index_id}
+        h1 THE MILLION DOLLAR QUESTION: #{index_q}
 
     form action="/" method="post" 
-    input type="radio" onclick="alert('Hello World!')" value="#{}"
-    input type="radio" onclick="alert('Hello World!')" value="#{}"
+        input type="radio" id="answ1" name="quiz_options" value="#{index_1}"
+        label for="#{index_1}" 
+            h1 Option 1: #{index_1}
+        input type="radio" id="answ2" name="quiz_options" value="#{index_2}"
+        label for="#{index_2}" 
+            h1 Option 2: #{index_2}
+
+        input type="submit" value="Post"
 
 div class="current_score"
-    h1 Score 
+    h1 Your current score is: #{highscore}
+
 
